@@ -46,6 +46,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _saveForm() {
+    _form.currentState!.validate();
     _form.currentState?.save();
     print(_editedProduct.title);
     print(_editedProduct.description);
@@ -77,6 +78,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_priceFocusNode);
                 },
+                validator: (value) {
+                  return value!.isEmpty ? 'Please provide a value' : null;
+                },
                 onSaved: (value) {
                   _editedProduct = Product(
                     title: value!,
@@ -95,6 +99,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_descriptionFocusNode);
                 },
+                validator: (value) {
+                  return value!.isEmpty ? 'Please provide a value' : null;
+                },
                 onSaved: (value) {
                   _editedProduct = Product(
                     title: _editedProduct.title,
@@ -110,6 +117,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descriptionFocusNode,
+                validator: (value) {
+                  return value!.isEmpty ? 'Please provide a value' : null;
+                },
                 onSaved: (value) {
                   _editedProduct = Product(
                     title: _editedProduct.title,
@@ -154,6 +164,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       focusNode: _imageUrlFocusNode,
                       onFieldSubmitted: (_) {
                         _saveForm();
+                      },
+                      validator: (value) {
+                        return value!.isEmpty ? 'Please provide a value' : null;
                       },
                       onSaved: (value) {
                         _editedProduct = Product(
