@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
-class EditProductsScreen extends StatefulWidget {
+class EditProductScreen extends StatefulWidget {
   static const routeName = '/edit-product';
 
-  const EditProductsScreen({Key? key}) : super(key: key);
-
   @override
-  _EditProductsScreenState createState() => _EditProductsScreenState();
+  _EditProductScreenState createState() => _EditProductScreenState();
 }
 
-class _EditProductsScreenState extends State<EditProductsScreen> {
+class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
+  final _imageUrlController = TextEditingController();
 
   @override
   void dispose() {
-    super.dispose();
     _priceFocusNode.dispose();
     _descriptionFocusNode.dispose();
+    _imageUrlController.dispose();
+    super.dispose();
   }
 
   @override
@@ -30,7 +30,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           child: ListView(
-            children: [
+            children: <Widget>[
               TextFormField(
                 decoration: InputDecoration(labelText: 'Title'),
                 textInputAction: TextInputAction.next,
@@ -52,6 +52,41 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descriptionFocusNode,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Container(
+                    width: 100,
+                    height: 100,
+                    margin: EdgeInsets.only(
+                      top: 8,
+                      right: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    child: _imageUrlController.text.isEmpty
+                        ? Text('Enter a URL')
+                        : FittedBox(
+                            child: Image.network(
+                              _imageUrlController.text,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: 'Image URL'),
+                      keyboardType: TextInputType.url,
+                      textInputAction: TextInputAction.done,
+                      controller: _imageUrlController,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
