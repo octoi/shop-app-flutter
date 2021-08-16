@@ -87,26 +87,32 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     const url = SERVER_URL + '/products.json';
-    final response = await http.post(
-      Uri.parse(url),
-      body: json.encode({
-        'title': product.title,
-        'description': product.description,
-        'imageUrl': product.imageUrl,
-        'price': product.price,
-        'isFavorite': product.isFavorite,
-      }),
-    );
 
-    final newProduct = Product(
-      id: json.decode(response.body)['name'],
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      imageUrl: product.imageUrl,
-    );
-    _items.insert(0, newProduct);
-    notifyListeners();
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }),
+      );
+
+      final newProduct = Product(
+        id: json.decode(response.body)['name'],
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+      );
+      _items.insert(0, newProduct);
+      notifyListeners();
+    } catch (err) {
+      print(err);
+      throw err;
+    }
   }
 
   void updateProduct(String id, Product product) {

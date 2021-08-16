@@ -97,23 +97,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
       setState(() => _isLoading = true);
     } else {
       try {
-        await Provider.of<Products>(context).addProduct(_editedProduct);
-      } catch (err) {
+        await Provider.of<Products>(context, listen: false).addProduct(
+          _editedProduct,
+        );
+      } catch (error) {
         await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
             title: Text('An error occurred 😖'),
             content: Text('Something went wrong.'),
-            actions: [
+            actions: <Widget>[
               FlatButton(
                 child: Text('Okay'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
+                onPressed: () => Navigator.of(ctx).pop(),
+              )
             ],
           ),
         );
       } finally {
-        setState(() => _isLoading = true);
+        setState(() => _isLoading = false);
         Navigator.of(context).pop();
       }
     }
