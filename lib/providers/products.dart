@@ -115,12 +115,29 @@ class Products with ChangeNotifier {
     }
   }
 
-  void updateProduct(String id, Product product) {
+  Future<void> updateProduct(String id, Product product) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
-    if (prodIndex >= 0) {
-      _items[prodIndex] = product;
+    final url = SERVER_URL + '/products/$id.json';
+
+    try {
+      await http.patch(
+        Uri.parse(url),
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+        }),
+      );
+
+      if (prodIndex >= 0) {
+        _items[prodIndex] = product;
+      }
+      notifyListeners();
+    } catch (err) {
+      print(err);
+      throw err;
     }
-    notifyListeners();
   }
 
   void deleteProduct(String id) {
