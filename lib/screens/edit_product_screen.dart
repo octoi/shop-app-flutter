@@ -98,10 +98,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
     } else {
       try {
         await Provider.of<Products>(context).addProduct(_editedProduct);
-        setState(() => _isLoading = true);
-        Navigator.of(context).pop();
       } catch (err) {
-        return showDialog(
+        await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
             title: Text('An error occurred 😖'),
@@ -113,10 +111,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
               ),
             ],
           ),
-        ).then((_) {
-          setState(() => _isLoading = true);
-          Navigator.of(context).pop();
-        });
+        );
+      } finally {
+        setState(() => _isLoading = true);
+        Navigator.of(context).pop();
       }
     }
   }
