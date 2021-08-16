@@ -68,14 +68,17 @@ class Products with ChangeNotifier {
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
       extractedData.forEach((proId, value) {
-        loadedProducts.add(Product(
-          id: proId,
-          title: value['title'],
-          description: value['description'],
-          imageUrl: value['imageUrl'],
-          price: value['price'],
-          isFavorite: value['isFavorite'],
-        ));
+        loadedProducts.insert(
+          0,
+          Product(
+            id: proId,
+            title: value['title'],
+            description: value['description'],
+            imageUrl: value['imageUrl'],
+            price: value['price'],
+            isFavorite: value['isFavorite'],
+          ),
+        );
       });
       _items = loadedProducts;
       notifyListeners();
@@ -141,7 +144,15 @@ class Products with ChangeNotifier {
   }
 
   void deleteProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
+    final url = SERVER_URL + '/products/$id.json';
+    final existingProductIdx = _items.indexWhere((prod) => prod.id == id);
+    final existingProduct = _items[existingProductIdx];
+    _items.removeAt(existingProductIdx);
+    http.delete(Uri.parse(url)).then((_) {
+      existingProduct.dispose();
+    }).catchError((_) {
+      _items.insert(existingProductIdx, existingProduct);
+    });
     notifyListeners();
   }
 }
