@@ -78,9 +78,15 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ProductsGrid(_showOnlyFavorites),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await Provider.of<Products>(context, listen: false)
+              .fetchAndSetAllProducts();
+        },
+        child: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : ProductsGrid(_showOnlyFavorites),
+      ),
     );
   }
 }
