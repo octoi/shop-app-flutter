@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
           create: (_) => Products('', []),
           update: (_, auth, previousItems) => Products(
             auth.token,
+            auth.userId,
             previousItems!.items,
           ),
         ),

@@ -27,6 +27,8 @@ class Auth with ChangeNotifier {
     }
   }
 
+  String get userId => _userId.toString();
+
   Future<void> _authenticate(
     String email,
     String password,

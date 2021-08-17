@@ -44,8 +44,9 @@ class Products with ChangeNotifier {
   var _showFavoritesOnly = false;
 
   final String authToken;
+  final String userId;
 
-  Products(this.authToken, this._items);
+  Products(this.authToken, this.userId, this._items);
 
   List<Product> get items => [..._items];
   List<Product> get favoriteItems {
@@ -67,21 +68,26 @@ class Products with ChangeNotifier {
   // }
 
   Future<void> fetchAndSetAllProducts() async {
-    final url = SERVER_URL + '/products.json?auth=${this.authToken}';
+    String url = SERVER_URL + '/products.json?auth=${this.authToken}';
     try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
+
+      url = SERVER_URL + '/userFavorites/$userId.json?auth=$authToken';
+      final favoriteResponse = await http.get(Uri.parse(url));
+      final favoriteData = json.decode(favoriteResponse.body);
+
       final List<Product> loadedProducts = [];
-      extractedData.forEach((proId, value) {
+      extractedData.forEach((prodId, value) {
         loadedProducts.insert(
           0,
           Product(
-            id: proId,
+            id: prodId,
             title: value['title'],
             description: value['description'],
             imageUrl: value['imageUrl'],
             price: value['price'],
-            isFavorite: value['isFavorite'],
+            isFavorite: favoriteData[prodId] ?? false,
           ),
         );
       });
