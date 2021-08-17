@@ -5,7 +5,9 @@ Tutorial from [Flutter & Dart - The Complete Guide [2021 Edition]](https://www.u
 ## Setup 
 
 Create a firebase project and enable `Realtime Database`
-copy the url and create file int `/lib/config.dart` fill it up with
+copy the url and also gram api key of the project from project settings 
+create file in `/lib/config.dart` fill it up with
 ```dart
-const String SERVER_URL = 'https://your-firebase-project';
+const String SERVER_URL = 'https://your-firebase-project'; // do not add `/` in end
+const String API_KEY = 'firebase-api-key';
 ```
