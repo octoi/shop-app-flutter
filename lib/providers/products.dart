@@ -67,8 +67,10 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> fetchAndSetAllProducts() async {
-    String url = SERVER_URL + '/products.json?auth=${this.authToken}';
+  Future<void> fetchAndSetAllProducts({bool filterByUser = false}) async {
+    final filterString =
+        filterByUser ? '&orderBy="creatorId"&equalTo="$userId"' : '';
+    String url = SERVER_URL + '/products.json?auth=$authToken$filterString';
     try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -111,6 +113,7 @@ class Products with ChangeNotifier {
           'imageUrl': product.imageUrl,
           'price': product.price,
           'isFavorite': product.isFavorite,
+          'creatorId': userId,
         }),
       );
 
