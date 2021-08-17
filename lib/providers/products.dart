@@ -43,6 +43,10 @@ class Products with ChangeNotifier {
 
   var _showFavoritesOnly = false;
 
+  final String authToken;
+
+  Products(this.authToken, this._items);
+
   List<Product> get items => [..._items];
   List<Product> get favoriteItems {
     return _items.where((prodItem) => prodItem.isFavorite).toList();
@@ -63,7 +67,7 @@ class Products with ChangeNotifier {
   // }
 
   Future<void> fetchAndSetAllProducts() async {
-    const url = SERVER_URL + '/products.json';
+    final url = SERVER_URL + '/products.json?auth=${this.authToken}';
     try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
