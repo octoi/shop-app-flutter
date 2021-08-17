@@ -26,12 +26,12 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleFavoriteStatus() async {
+  void toggleFavoriteStatus(String token) async {
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
 
-    final url = SERVER_URL + '/products/$id.json';
+    final url = SERVER_URL + '/products/$id.json?auth=$token';
 
     try {
       final response = await http.patch(

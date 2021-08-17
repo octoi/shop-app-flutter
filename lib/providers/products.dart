@@ -94,7 +94,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    const url = SERVER_URL + '/products.json';
+    final url = SERVER_URL + '/products.json?auth=${this.authToken}';
 
     try {
       final response = await http.post(
@@ -125,7 +125,7 @@ class Products with ChangeNotifier {
 
   Future<void> updateProduct(String id, Product product) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
-    final url = SERVER_URL + '/products/$id.json';
+    final url = SERVER_URL + '/products/$id.json?auth=${this.authToken}';
 
     try {
       await http.patch(
@@ -149,7 +149,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> deleteProduct(String id) async {
-    final url = SERVER_URL + '/products/$id.json';
+    final url = SERVER_URL + '/products/$id.json?auth=${this.authToken}';
     final existingProductIdx = _items.indexWhere((prod) => prod.id == id);
     final existingProduct = _items[existingProductIdx];
     _items.removeAt(existingProductIdx);
