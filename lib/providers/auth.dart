@@ -30,7 +30,14 @@ class Auth with ChangeNotifier {
     }
   }
 
-  String get userId => _userId.toString();
+  String get userId {
+    try {
+      return _userId.toString();
+    } catch (err) {
+      print(err);
+      return null.toString();
+    }
+  }
 
   Future<void> _authenticate(
     String email,
